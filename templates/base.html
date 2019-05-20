@@ -26,7 +26,7 @@
     <div class="container">
       <a class="navbar-left navbar-brand" href="/"><img src="{{ url_for('static', filename='img/muffin.png') }}" title="tassaron" alt="muffin with crown">&nbsp;Brianna Rainey</a>
       
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler px-1" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -86,7 +86,7 @@
 
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4">
-    <h1 class="display-3">{% block header %}{% endblock %}</a></h1>
+    <h1 class="display-3">{% block header %}{% endblock %}</h1>
     <p class="lead">
       {% block content %}{% endblock %}
     </p>

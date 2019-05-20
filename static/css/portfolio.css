@@ -8,6 +8,7 @@ body {
 }
 
 .footer {
+  font-size: smaller !important;
   position: absolute !important;
   bottom: 0 !important;
   width: 100% !important;
@@ -29,8 +30,10 @@ body {
 }
 
 .navbar-brand {
-    font-family: serif !important;
+    letter-spacing: .2rem;
+    font-family: Georgia, serif;
     font-variant: small-caps;
+    text-shadow: 1px 1px 0 #92a5b8, 1px 2px 0 #111;
 }
 
 .nav-item {
