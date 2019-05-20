@@ -1,0 +1,60 @@
+{% set selected = 1 %}
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+{% block title %}
+Brianna Rainey
+{% endblock %}
+
+{% block nav %}
+  <li class="nav-item active">
+    <a class="nav-link" href="/">
+      Home
+      <span class="sr-only">
+        (current)
+      </span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/about">
+      About
+    </a>
+  </li>
+{% endblock %}
+
+{% block content %}
+Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github.com/tassaron2/portfolio-website">The code for this website is available on GitHub.</a> Now here are some examples of software I've made recently…
+{% endblock %}
+
+{% block projects %}
+<div class="row text-center">
+
+  <div class="col-lg-3 col-md-6 mb-4">
+    <div class="card h-100">
+      <img class="card-img-top" src="{{ url_for('static', filename='img/projects/pyaudiovis500x325.png') }}" alt="">
+      <div class="card-body">
+        <h4 class="card-title">Python Audio Visualizer</h4>
+        <p class="card-text">A cross-platform desktop app for generating videos with visualizations based on an input audio file. Useful for podcasters.</p>
+      </div>
+      <div class="card-footer">
+        <a href="/projects/pyaudiovis" class="btn btn-primary">Source Code</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 mb-4">
+    <div class="card h-100">
+      <img class="card-img-top" src="{{ url_for('static', filename='img/projects/breakout500x325.png') }}" alt="">
+      <div class="card-body">
+        <h4 class="card-title">Breakout</h4>
+        <p class="card-text">A simple Breakout clone playable in your web browser on any device.</p>
+      </div>
+      <div class="card-footer">
+        <a href="/projects/breakout" class="btn btn-primary">Play Now</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

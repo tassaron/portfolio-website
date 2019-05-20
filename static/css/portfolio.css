@@ -1,0 +1,43 @@
+html {
+  position: relative !important;
+  min-height: 100% !important;
+}
+
+body {
+  margin-bottom: 120px !important;
+}
+
+.footer {
+  position: absolute !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  background: #322a4f !important;
+}
+
+.navbar {
+  background: #254b70 !important;
+}
+
+.btn-primary, .btn-primary:visited {
+    background: #4d417a !important;
+    border-color: #4d417a !important;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    background: #231e38 !important;
+    border-color: #322a4f !important;
+}
+
+.navbar-brand {
+    font-family: serif !important;
+    font-variant: small-caps;
+}
+
+.nav-item {
+    padding-right: 0.5em;
+}
+
+.icon-bar img {
+    padding: 0.2em;
+    height: 2em;
+}

@@ -1,0 +1,28 @@
+{% set selected = 2 %}
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+{% block title %}
+    About Brianna
+{% endblock %}
+
+{% block nav %}
+  <li class="nav-item">
+    <a class="nav-link" href="/">
+      Home
+    </a>
+  </li>
+  <li class="nav-item active">
+    <a class="nav-link" href="/about">
+      About
+      <span class="sr-only">
+        (current)
+      </span>
+    </a>
+  </li>
+{% endblock %}
+    
+{% block content %}
+  Bio goes here.
+{% endblock %}

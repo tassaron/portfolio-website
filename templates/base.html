@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Brianna Rainey's tech portfolio">
+  <meta name="author" content="tassaron">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="{{ url_for('static', filename='css/portfolio.css') }}"
+  rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/heroic-features.css') }}"
+  rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  
+  <title>{% block title %}{% endblock %}{{ test }}</title>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-left navbar-brand" href="/"><img src="{{ url_for('static', filename='img/muffin.png') }}" title="tassaron" alt="muffin with crown">&nbsp;Brianna Rainey</a>
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          {% if selected == 1 %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/">
+              Home
+              <span class="sr-only">
+                (current)
+              </span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              Home
+            </a>
+          </li>
+          {% endif %}
+          {% if selected == 2 %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/about">
+              About
+              <span class="sr-only">
+                (current)
+              </span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              About
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <span class="icon-bar">
+              <a href="https://github.com/tassaron2">
+                <img src="{{ url_for('static', filename='img/github32.png') }}" title="GitHub" alt="GitHub badge">
+              </a>
+              <a href="https://tassaron.com/@brianna">
+                <img src="{{ url_for('static', filename='img/mastodon32.png') }}" title="Mastodon" alt="Mastodon badge">
+              </a>
+              <a href="https://twitter.com/tassaron">
+                <img src="{{ url_for('static', filename='img/twitter32.png') }}" title="Twitter" alt="Twitter badge">
+              </a>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4">
+    <h1 class="display-3">{% block header %}{% endblock %}</a></h1>
+    <p class="lead">
+      {% block content %}{% endblock %}
+    </p>
+    </header>
+
+    {% block projects %}
+    {% endblock %}
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="footer bg-dark">
+    <div class="container">
+      <p class="row-sm-6 text-center text-white"><small>Text and images on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">rainey.tech</span> are authored by <a xmlns:cc="http://creativecommons.org/ns#" href="https://tassaron.com" property="cc:attributionName" rel="cc:attributionURL">Brianna Rainey</a> and licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a> <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="{{ url_for('static', filename='img/cc-by-compact.png') }}" /></a> Source code available on <a href="https://github.com/tassaron2/portfolio-website">GitHub</a>.</small></p>
+    </div>
+    <!-- /.container -->
+  </footer>
+  
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
+
