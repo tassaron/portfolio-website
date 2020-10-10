@@ -8,23 +8,24 @@ Brianna Rainey
 {% endblock %}
 
 {% block nav %}
-  <li class="nav-item active">
-    <a class="nav-link" href="/">
-      Home
-      <span class="sr-only">
-        (current)
-      </span>
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/about">
-      About
-    </a>
-  </li>
+<li class="nav-item active">
+  <a class="nav-link" href="/">
+    Home
+    <span class="sr-only">
+      (current)
+    </span>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="/about">
+    About
+  </a>
+</li>
 {% endblock %}
 
 {% block content %}
-Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github.com/tassaron2/portfolio-website">The code for this website is available on GitHub.</a> Now here are some examples of software I've made recently…
+Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github.com/tassaron2/portfolio-website">The
+  code for this website is available on GitHub.</a> Now here are some examples of software I've made recently…
 {% endblock %}
 
 {% block projects %}
@@ -35,7 +36,8 @@ Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github
       <img class="card-img-top" src="{{ url_for('static', filename='img/projects/pyaudiovis500x325.png') }}" alt="">
       <div class="card-body">
         <h4 class="card-title">Python Audio Visualizer</h4>
-        <p class="card-text">A cross-platform desktop app for generating videos with visualizations based on an input audio file. Useful for podcasters.</p>
+        <p class="card-text">A cross-platform desktop app for generating videos with visualizations based on an input
+          audio file. Useful for podcasters.</p>
       </div>
       <div class="card-footer">
         <a href="/projects/pyaudiovis" class="btn btn-primary">Source Code</a>
@@ -52,6 +54,19 @@ Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github
       </div>
       <div class="card-footer">
         <a href="/projects/breakout" class="btn btn-primary">Play Now</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 mb-4">
+    <div class="card h-100">
+      <img class="card-img-top" src="{{ url_for('static', filename='img/projects/funtimes500x325.png') }}" alt="">
+      <div class="card-body">
+        <h4 class="card-title">Batch File Adventure Game as a webapp</h4>
+        <p class="card-text">This Flask application interprets the original batch files I wrote in 2008!</p>
+      </div>
+      <div class="card-footer">
+        <a href="/projects/funtimes" class="btn btn-primary">Play Now</a>
       </div>
     </div>
   </div>
