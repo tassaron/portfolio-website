@@ -24,7 +24,11 @@ def projectsBaseDir():
 
 @app.route("/projects/<projectName>")
 def projects(projectName):
-    if projectName == "pyaudiovis":
+    if projectName == "jezzball":
+        return flask.redirect("https://fun.tassaron.com/jezzball", code=301)
+    elif projectName == "dnd":
+        return flask.redirect("https://dnd.tassaron.com/", code=301)
+    elif projectName == "pyaudiovis":
         return flask.redirect(
             "https://github.com/djfun/audio-visualizer-python/tree/feature-newgui",
             code=301,
