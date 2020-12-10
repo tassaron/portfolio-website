@@ -31,15 +31,16 @@ Hi! I'm a programmer and this is a portfolio of my work. <a href="https://github
 {% block projects %}
 <div class="row text-center">
 
-  <div class="col-lg-3 col-md-6 mb-4">
+  <div id="game" class="col-lg-3 col-md-6 mb-4">
     <div class="card h-100">
-      <img class="card-img-top" src="{{ url_for('static', filename='img/projects/jezzball500x325.png') }}" alt="">
-      <div class="card-body">
-        <h4 class="card-title">Jezzball</h4>
-        <p class="card-text">A remake of the classic game Jezzball with touchscreen controls.</p>
-      </div>
-      <div class="card-footer">
-        <a href="/projects/jezzball" class="btn btn-primary">Play Now</a>
+      {% include 'jezzball.html' %}
+      <div class="card-body pushed-under-canvas">
+        <h4 class="card-title" style="margin-top: 0.5rem;">Jezzball</h4>
+        <p class="card-text">A remake of the classic game Jezzball with touchscreen controls. Tap the button to swap the
+          direction you place walls!
+        <div class="btn btn-secondary" id="swap_button">↻ Swap Direction</div>
+        </p>
+        <a href="/projects/jezzball" class="btn btn-primary">Play Full-Size Version</a>
       </div>
     </div>
   </div>

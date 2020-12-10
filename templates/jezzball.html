@@ -1,0 +1,47 @@
+<!-- Jezzball starts -->
+<script type="module" src="{{ url_for('static', filename='js/jezzball-thumb/main.js') }}"></script>
+<style>
+    .pushed-under-canvas {
+        margin-top: 310px;
+    }
+
+    @media only screen and (min-width: 1000px) {
+        .pushed-under-canvas {
+            margin-top: 150px;
+        }
+    }
+
+    #game {
+        min-width: 250px;
+        position: relative;
+    }
+
+    canvas {
+        border: 2px solid black;
+        width: 100%;
+    }
+
+    #ui-layer {
+        z-index: 3;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    #slow-layer {
+        z-index: 2;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    #game-layer {
+        z-index: 1;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+</style>
+<canvas id="ui-layer" width="250" height="160"></canvas>
+<canvas id="slow-layer" width="250" height="160"></canvas>
+<canvas id="game-layer" width="250" height="160"></canvas>

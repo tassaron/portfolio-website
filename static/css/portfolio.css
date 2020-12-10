@@ -16,7 +16,7 @@ body {
 }
 
 .navbar {
-  background: #254b70 !important;
+  background: #4d417a !important;
 }
 
 .btn-primary, .btn-primary:visited {
@@ -25,8 +25,18 @@ body {
 }
 
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-    background: #231e38 !important;
-    border-color: #322a4f !important;
+    background: #431e38 !important;
+    border-color: #522a4f !important;
+}
+
+.btn-secondary, .btn-secondary:visited {
+  background: #8E63C3 !important;
+  border-color: #8E63C3 !important;
+}
+
+.btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus {
+  background: #6d417a !important;
+  border-color: #4d417a !important;
 }
 
 .navbar-brand {
