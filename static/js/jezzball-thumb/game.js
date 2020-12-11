@@ -42,7 +42,7 @@ function resetBall() {
     while (balls.length > 2) {
         balls.pop();
     }
-    timer.ballPause = 180;
+    timer.ballPause = 600;
     timer.active = true;
     timer.dying = 0;
 };

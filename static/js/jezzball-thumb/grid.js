@@ -6,7 +6,7 @@ import { purple } from './game.js';
 import { Ball, balls } from './ball.js';
 let slowcanvas = document.getElementById("slow-layer");
 
-export const grid_size = 10;
+export const grid_size = 5;
 export const px2grid = px => Math.floor(px / grid_size)
 export const grid2px = grid_coord => grid_coord * grid_size;
 export const gridsafe = px => grid2px(px2grid(px));

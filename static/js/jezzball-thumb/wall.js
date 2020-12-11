@@ -107,14 +107,14 @@ export class Wall {
             } else {
                 if (this.y > this.lowpoint && this.y + this.height < this.highpoint) {
                     // Move up while expanding to give the illusion of expanding from both sides
-                    this.height += 20 * fps_ratio(delta);
-                    this.y -= 10 * fps_ratio(delta);
-                } else if (this.y > this.lowpoint) {
-                    this.y -= 10 * fps_ratio(delta);
                     this.height += 10 * fps_ratio(delta);
+                    this.y -= 5 * fps_ratio(delta);
+                } else if (this.y > this.lowpoint) {
+                    this.y -= 5 * fps_ratio(delta);
+                    this.height += 5 * fps_ratio(delta);
                 } else {
                     this.y = this.lowpoint.valueOf();
-                    this.height += 10 * fps_ratio(delta);
+                    this.height += 5 * fps_ratio(delta);
                 }
             }
         } else {
@@ -125,11 +125,11 @@ export class Wall {
             } else {
                 if (this.x > this.lowpoint && this.x + this.width < this.highpoint) {
                     // Move left while expanding to give the illusion of expanding from both sides
-                    this.width += 20 * fps_ratio(delta);
-                    this.x -= 10 * fps_ratio(delta);
-                } else if (this.x > this.lowpoint) {
-                    this.x -= 10 * fps_ratio(delta);
                     this.width += 10 * fps_ratio(delta);
+                    this.x -= 5 * fps_ratio(delta);
+                } else if (this.x > this.lowpoint) {
+                    this.x -= 5 * fps_ratio(delta);
+                    this.width += 5 * fps_ratio(delta);
                 } else {
                     this.x = this.lowpoint.valueOf();
                     this.width += 10 * fps_ratio(delta);
