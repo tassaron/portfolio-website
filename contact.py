@@ -2,6 +2,12 @@ from flask import Blueprint, render_template, flash
 import os
 import smtplib
 from forms import ContactForm
+import logging
+
+
+LOG = logging.getLogger(__package__)
+if os.environ["FLASK_ENV"] == "development":
+    LOG.warning("ATTN: Emails won't send because FLASK_ENV is set to development")
 
 try:
     EMAIL_ADDRESS = os.environ["EMAIL_ADDRESS"]
@@ -17,8 +23,10 @@ contact_blueprint = Blueprint("contact", __name__)
 def contact():
     form = ContactForm()
     if form.validate_on_submit():
-        flash("Email sent! Thanks", "success")
-        return render_template("contact.html", form=form)
+        if os.environ["FLASK_ENV"] == "development":
+            flash("Email sent! Thanks", "success")
+            return render_template("contact.html", form=form)
+        # Production
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             subject = form.mail_subject.data

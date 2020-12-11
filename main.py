@@ -15,7 +15,9 @@ main_blueprint = Blueprint("main", __name__)
 def create_app():
     if "SECRET_KEY" not in os.environ:
         with open(".env", "a") as f:
-            f.write(f"\nFLASK_APP=run:app\nSECRET_KEY={os.urandom(24)}\n")
+            f.write(
+                f"\nFLASK_APP=run:app\nFLASK_ENV=development\nSECRET_KEY={os.urandom(24)}\n"
+            )
     app = Flask(__name__)
     app.config.update(SECRET_KEY=os.environ.get("SECRET_KEY", os.urandom(24)))
     app.register_blueprint(main_blueprint)
