@@ -3,6 +3,7 @@ import os
 import smtplib
 from forms import ContactForm
 import logging
+import requests
 
 
 LOG = logging.getLogger(__package__)
@@ -10,8 +11,11 @@ if os.environ["FLASK_ENV"] == "development":
     LOG.warning("ATTN: Emails won't send because FLASK_ENV is set to development")
 
 try:
-    EMAIL_ADDRESS = os.environ["EMAIL_ADDRESS"]
-    EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
+    EMAIL_API_KEY = os.environ["EMAIL_API_KEY"]
+    EMAIL_API_URL = os.environ["EMAIL_API_URL"]
+    EMAIL_SENDER_NAME = os.environ["EMAIL_SENDER_NAME"]
+    EMAIL_SENDER_ADDRESS = os.environ["EMAIL_SENDER_ADDRESS"]
+    EMAIL_RECEIVER_ADDRESS = os.environ["EMAIL_RECEIVER_ADDRESS"]
 except KeyError:
     raise KeyError("You need to create a valid .env file")
 
@@ -27,14 +31,21 @@ def contact():
             flash("Email sent! Thanks", "success")
             return render_template("contact.html", form=form)
         # Production
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-            subject = form.mail_subject.data
-            body = form.mail_body.data
-            msg = f"Subject: {subject}\n\n{body}\RESPOND TO: {form.sent_by.data}"
-            try:
-                smtp.sendmail(EMAIL_ADDRESS, EMAIL_ADDRESS, msg)
-                flash("Email sent! Thanks", "success")
-            except:
-                flash("There was an error sending the email", "warning")
+        try:
+            send_email(form.mail_subject.data, form.mail_body.data)
+        except:
+            flash("There was an error sending the email", "warning")
     return render_template("contact.html", form=form)
+
+
+def send_email(subject, body):
+    return requests.post(
+        f"{EMAIL_API_URL}/messages",
+        auth=("api", EMAIL_API_KEY),
+        data={
+            "from": f"{EMAIL_SENDER_NAME} <{EMAIL_SENDER_ADDRESS}>",
+            "to": [f"{EMAIL_RECEIVER_ADDRESS}"],
+            "subject": subject,
+            "text": body,
+        },
+    )
