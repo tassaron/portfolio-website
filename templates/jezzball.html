@@ -2,12 +2,18 @@
 <script type="module" src="{{ url_for('static', filename='js/jezzball-thumb/main.js') }}"></script>
 <style>
     .pushed-under-canvas {
-        margin-top: 310px;
+        margin-top: 20em;
     }
 
-    @media only screen and (min-width: 1000px) {
+    @media only screen and (min-width: 768px) {
         .pushed-under-canvas {
-            margin-top: 150px;
+            margin-top: 12em;
+        }
+    }
+
+    @media only screen and (min-width: 992px) {
+        .pushed-under-canvas {
+            margin-top: 9.5em;
         }
     }
 

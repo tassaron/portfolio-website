@@ -51,8 +51,8 @@ function touchMoveHandler(e) {
     // get relative (to canvas and scroll position) coords of touch
     let touch = e.changedTouches[0];
     let scroll_position = document.getScroll();
-    mouseX = touch.pageX - gamediv.offsetLeft + scroll_position[0];
-    mouseY = touch.pageY - gamediv.offsetTop + scroll_position[1];
+    mouseX = (touch.pageX - gamediv.offsetLeft + scroll_position[0]) * uicanvas.width / uicanvas.clientWidth;
+    mouseY = (touch.pageY - gamediv.offsetTop + scroll_position[1]) * uicanvas.height / uicanvas.clientHeight;
     if (mouseX > 0 && mouseX < uicanvas.width) {
         paddle.x = mouseX <= grid_size ? 0 : mouseX - paddle.width / 2;
         e.preventDefault();
@@ -81,7 +81,7 @@ function mouseMoveHandler(e) {
     // Get relative (to canvas and scroll position) coords of mouse
     let scroll_position = document.getScroll();
     mouseX = (e.clientX - gamediv.offsetLeft + scroll_position[0]) * uicanvas.width / uicanvas.clientWidth;
-    mouseY = (e.clientY - gamediv.offsetTop + scroll_position[1]) * uicanvas.width / uicanvas.clientWidth;
+    mouseY = (e.clientY - gamediv.offsetTop + scroll_position[1]) * uicanvas.height / uicanvas.clientHeight;
     // Move paddle
     if (mouseX > 0 && mouseX < uicanvas.width) {
         paddle.x = mouseX <= grid_size ? 0 : mouseX - paddle.width / 2;
