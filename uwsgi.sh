@@ -6,4 +6,4 @@ else
     port="$1"
 fi
 
-uwsgi --socket 0.0.0.0:$port --protocol=http -w main:app
+uwsgi --socket 0.0.0.0:$port --protocol=http -w run:app --enable-threads --processes 5 --master --worker-reload-mercy=1

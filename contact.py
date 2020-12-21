@@ -1,14 +1,8 @@
-from flask import Blueprint, render_template, flash
+from flask import Blueprint, render_template, flash, current_app
 import os
-import smtplib
 from forms import ContactForm
-import logging
 import requests
 
-
-LOG = logging.getLogger(__package__)
-if os.environ["FLASK_ENV"] == "development":
-    LOG.warning("ATTN: Emails won't send because FLASK_ENV is set to development")
 
 try:
     EMAIL_API_KEY = os.environ["EMAIL_API_KEY"]
@@ -26,17 +20,40 @@ contact_blueprint = Blueprint("contact", __name__)
 @contact_blueprint.route("/contact", methods=["GET", "POST"])
 def contact():
     form = ContactForm()
-    if os.environ["FLASK_ENV"] == "production" and form.validate_on_submit():
+    if form.validate_on_submit():
         try:
-            send_email(form.mail_subject.data, form.mail_body.data, form.sent_by.data)
+            queue_email(
+                current_app,
+                form.mail_subject.data,
+                form.mail_body.data,
+                form.sent_by.data,
+            )
             flash("Email sent! Thanks", "success")
         except:
             flash("There was an error sending the email", "warning")
     return render_template("contact.html", form=form)
 
 
-def send_email(subject, body, respond_to):
-    return requests.post(
+def queue_email(app, subj, body, respond_to):
+    app.email_queue.put((subj, body, respond_to))
+    app.logger.warning(f"Queuing a new email with subject {subj}")
+    n = app.email_queue.qsize()
+    if n > 1:
+        app.logger.warning(f"The email queue has {n} messages in it")
+        app.logger.warning(f"Newly queued email is below:")
+        app.logger.warning(f"/* SUBJECT: {subj}")
+        app.logger.warning(str(body))
+        app.logger.warning(f"REPLY-TO: {respond_to}")
+        app.logger.warning("*/ end of email")
+
+
+def send_email(app, subject, body, respond_to):
+    if os.environ["FLASK_ENV"] != "production":
+        app.logger.info(
+            f"Email would be sent in production: {subject}: {body} from {respond_to}"
+        )
+        return
+    requests.post(
         f"{EMAIL_API_URL}/messages",
         auth=("api", EMAIL_API_KEY),
         data={
