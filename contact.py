@@ -53,13 +53,21 @@ def send_email(app, subject, body, respond_to):
             f"Email would be sent in production: {subject}: {body} from {respond_to}"
         )
         return
-    requests.post(
-        f"{EMAIL_API_URL}/messages",
-        auth=("api", EMAIL_API_KEY),
-        data={
-            "from": f"{EMAIL_SENDER_NAME} <{EMAIL_SENDER_ADDRESS}>",
-            "to": [f"{EMAIL_RECEIVER_ADDRESS}"],
-            "subject": subject,
-            "text": f"{body}\n\nRESPOND TO: {respond_to}",
-        },
-    )
+    try:
+        resp = requests.post(
+            f"{EMAIL_API_URL}/messages",
+            auth=("api", EMAIL_API_KEY),
+            data={
+                "from": f"{EMAIL_SENDER_NAME} <{EMAIL_SENDER_ADDRESS}>",
+                "to": [f"{EMAIL_RECEIVER_ADDRESS}"],
+                "subject": subject,
+                "text": f"{body}\n\nRESPOND TO: {respond_to}",
+            },
+        )
+        if resp.status_code != 200:
+            app.logger.warning(f"The server responded with {str(resp.status_code)}")
+            return False
+    except Exception as e:
+        app.logger.warning(f"Exception while sending email: {repr(e)}")
+        return False
+    return True

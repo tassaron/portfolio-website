@@ -10,7 +10,7 @@ from flask import Flask, Blueprint, render_template, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
 from contact import contact_blueprint, send_email
 from multiprocessing import Queue
-from queue import Empty, Full
+from queue import Empty
 from time import time
 import atexit
 import logging
@@ -34,7 +34,9 @@ main_blueprint = Blueprint("main", __name__)
 def send_scheduled_email(app):
     try:
         email = app.email_queue.get(block=False)
-        send_email(app, *email)
+        resp = send_email(app, *email)
+        if resp == False:
+            app.email_queue.put(email)
     except Empty:
         app.logger.info("No emails to send")
 
