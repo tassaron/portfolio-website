@@ -14,6 +14,8 @@ from queue import Empty, Full
 from time import time
 import atexit
 import logging
+import uwsgi
+import pytz
 
 
 logging.basicConfig(
@@ -31,42 +33,29 @@ main_blueprint = Blueprint("main", __name__)
 
 def send_scheduled_email(app):
     try:
-        last_run = app.email_cooldown.get(block=False)
-    except Empty:
-        app.logger.debug("Another process has the cooldown variable right now")
-        return
-    if time() - last_run < (29 if app.env != "production" else 24 * 60 * 50):
-        app.logger.debug("Too soon between emails")
-        try:
-            app.email_cooldown.put(last_run, block=True, timeout=1)
-        except Full:
-            app.logger.debug("Cooldown queue was full")
-        return
-
-    try:
         email = app.email_queue.get(block=False)
         send_email(app, *email)
-        app.email_cooldown.put(time())
     except Empty:
         app.logger.info("No emails to send")
-        app.email_cooldown.put(last_run)
 
 
-def schedule_emails(app, email_interval):
+def schedule_emails(app, email_intervals):
     app.email_queue = Queue()
-    app.email_cooldown = Queue(maxsize=1)
-    app.email_cooldown.put(time())
-    scheduled_email_queue = BackgroundScheduler(daemon=True)
-    scheduled_email_queue.add_job(
-        lambda: send_scheduled_email(app),
-        "cron",
-        **email_interval,
+    scheduled_email_queue = BackgroundScheduler(
+        daemon=True, timezone=pytz.timezone("America/Toronto")
     )
+    for email_interval in email_intervals:
+        scheduled_email_queue.add_job(
+            lambda: send_scheduled_email(app),
+            trigger="cron",
+            **email_interval,
+        )
     atexit.register(lambda: scheduled_email_queue.shutdown(wait=False))
     scheduled_email_queue.start()
 
 
 def create_app():
+    global INSTANCE
     if "SECRET_KEY" not in os.environ:
         with open(".env", "a") as f:
             f.write(
@@ -74,21 +63,47 @@ def create_app():
             )
     app = Flask(__name__)
     app.config.update(SECRET_KEY=os.environ.get("SECRET_KEY", os.urandom(24)))
-    if app.env == "production":
-        email_interval = {
-            "hour": "8",
-            "minute": "30",
-            "second": "10",
-        }
-    else:
-        email_interval = {
-            "hour": "*",
-            "minute": "*",
-            "second": "*/30",
-        }
-    schedule_emails(app, email_interval)
     app.register_blueprint(main_blueprint)
     app.register_blueprint(contact_blueprint)
+    if app.env == "production":
+        email_intervals = [
+            {
+                "hour": "8",
+                "minute": "30",
+                "second": "10",
+            },
+            {
+                "hour": "13",
+                "minute": "37",
+                "second": "42",
+            },
+            {
+                "hour": "20",
+                "minute": "08",
+                "second": "08",
+            },
+        ]
+    else:
+        email_intervals = [
+            {
+                "hour": "*",
+                "minute": "*",
+                "second": "0",
+            },
+            {
+                "hour": "*",
+                "minute": "*",
+                "second": "30",
+            },
+        ]
+    uwsgi.lock()
+    if os.environ.get("EMAIL_QUEUE") is None:
+        pid = str(os.getpid())
+        app.logger.info(f"EMAIL_QUEUE is pid {pid}")
+        uwsgi.setprocname("uwsgi email queue worker")
+        os.environ["EMAIL_QUEUE"] = str(os.getpid())
+        schedule_emails(app, email_intervals)
+    uwsgi.unlock()
     return app
 
 
