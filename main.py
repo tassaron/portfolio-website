@@ -14,8 +14,23 @@ from queue import Empty
 from time import time
 import atexit
 import logging
-import uwsgi
 import pytz
+
+try:
+    import uwsgi
+except ModuleNotFoundError:
+    # uwsgi can't be imported when it's not running, such as during a test
+    class uWSGI_stub:
+        def lock(*_):
+            ...
+
+        def unlock(*_):
+            ...
+
+        def setprocname(*_):
+            ...
+
+    uwsgi = uWSGI_stub()
 
 
 logging.basicConfig(
@@ -57,14 +72,18 @@ def schedule_emails(app, email_intervals):
 
 
 def create_app():
-    global INSTANCE
-    if "SECRET_KEY" not in os.environ:
-        with open(".env", "a") as f:
-            f.write(
-                f"\nFLASK_APP=run:app\nFLASK_ENV=development\nSECRET_KEY={os.urandom(24)}\n"
-            )
-    app = Flask(__name__)
-    app.config.update(SECRET_KEY=os.environ.get("SECRET_KEY", os.urandom(24)))
+    env_vars = {
+        "FLASK_APP": "run:app",
+        "FLASK_ENV": "development",
+        "SECRET_KEY": os.urandom(24),
+    }
+    for var, default in env_vars.items():
+        if var not in os.environ:
+            with open(".env", "a") as f:
+                f.write(f"\n{var}={default}")
+    load_dotenv()
+    app = Flask("portfolio")
+    app.config.update(SECRET_KEY=os.environ["SECRET_KEY"])
     app.register_blueprint(main_blueprint)
     app.register_blueprint(contact_blueprint)
     if app.env == "production":
@@ -103,7 +122,7 @@ def create_app():
         pid = str(os.getpid())
         app.logger.info(f"EMAIL_QUEUE is pid {pid}")
         uwsgi.setprocname("uwsgi email queue worker")
-        os.environ["EMAIL_QUEUE"] = str(os.getpid())
+        os.environ["EMAIL_QUEUE"] = pid
         schedule_emails(app, email_intervals)
     uwsgi.unlock()
     return app
