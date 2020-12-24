@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-from flask import Flask, Blueprint, render_template, redirect
+from flask import Flask, Blueprint, render_template, redirect, url_for, abort
 from apscheduler.schedulers.background import BackgroundScheduler
 from contact import contact_blueprint, send_email
 from multiprocessing import Queue
@@ -23,7 +23,7 @@ logging.basicConfig(
         logging.StreamHandler(),
         logging.FileHandler(os.environ.get("LOG_FILE", "debug.log")),
     ],
-    format="%(asctime)s %(name)-8.8s [%(levelname)s] %(message)s",
+    format="%(name)-8.8s [%(levelname)s] %(message)s",
     level=logging.getLevelName(os.environ.get("LOG_LEVEL", "WARNING")),
 )
 
@@ -119,26 +119,23 @@ def about():
     return render_template("about.html")
 
 
-@main_blueprint.route("/projects/")
-def projectsBaseDir():
-    return redirect("https://rainey.tech", code=301)
+@main_blueprint.route("/projects/<project>")
+def projects(project):
+    projects = {
+        "jezzball": "https://fun.tassaron.com/jezzball",
+        "tabletop": "https://dnd.tassaron.com",
+        "pyaudiovis": "https://github.com/djfun/audio-visualizer-python/tree/feature-newgui",
+        "breakout": "https://fun.tassaron.com/breakout",
+        "funtimes": "http://bat.tassaron.com",
+    }
+    if project in projects:
+        return redirect(projects[project])
+    abort(404)
 
 
-@main_blueprint.route("/projects/<projectName>")
-def projects(projectName):
-    if projectName == "jezzball":
-        return redirect("https://fun.tassaron.com/jezzball", code=301)
-    elif projectName == "dnd":
-        return redirect("https://dnd.tassaron.com/", code=301)
-    elif projectName == "pyaudiovis":
-        return redirect(
-            "https://github.com/djfun/audio-visualizer-python/tree/feature-newgui",
-            code=301,
-        )
-    elif projectName == "breakout":
-        return redirect("https://fun.tassaron.com/breakout", code=301)
-    elif projectName == "funtimes":
-        return redirect("http://bat.tassaron.com", code=301)
+@main_blueprint.app_errorhandler(404)
+def error(e):
+    return render_template("error.html", title=e.name, text=e.description)
 
 
 if __name__ == "__main__":
