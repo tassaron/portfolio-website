@@ -12,6 +12,8 @@ from contact import contact_blueprint, send_email
 from multiprocessing import Queue
 from queue import Empty
 from time import time
+import tempfile
+import shutil
 import atexit
 import logging
 import pytz
@@ -71,6 +73,17 @@ def schedule_emails(app, email_intervals):
     scheduled_email_queue.start()
 
 
+def create_tempdir(prefix):
+    """Create named temporary directory which is deleted at exit"""
+    directory = tempfile.mkdtemp(prefix=prefix)
+
+    def delete_tempdir():
+        shutil.rmtree(directory)
+
+    atexit.register(delete_tempdir)
+    return directory
+
+
 def create_app():
     env_vars = {
         "FLASK_APP": "run:app",
@@ -124,6 +137,7 @@ def create_app():
         uwsgi.setprocname("uwsgi email queue worker")
         os.environ["EMAIL_QUEUE"] = pid
         schedule_emails(app, email_intervals)
+        app.config["SPAM_DIR"] = create_tempdir("SPAM")
     uwsgi.unlock()
     return app
 
