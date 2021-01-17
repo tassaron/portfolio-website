@@ -168,7 +168,7 @@ def projects(project):
 
 @main_blueprint.app_errorhandler(404)
 def error(e):
-    return render_template("error.html", title=e.name, text=e.description)
+    return render_template("error.html", title=e.name, text=e.description), 404
 
 
 if __name__ == "__main__":
