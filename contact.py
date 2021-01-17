@@ -49,6 +49,9 @@ def queue_email(app, subj, body, respond_to) -> Tuple[bool, Union[str, int]]:
     If failed, returns tuple (False, path_to_tempfile: str)
     """
 
+    def has_spam_words(body: str) -> bool:
+        return " SEO " in body or "subscribe" in body or "click here" in body.lower()
+
     def write_email(out, subj, body, respond_to):
         """Write email somewhere instead of sending it"""
         out(f"/* SUBJECT: {subj}")
@@ -59,7 +62,7 @@ def queue_email(app, subj, body, respond_to) -> Tuple[bool, Union[str, int]]:
     emails_in_body = re.findall(
         r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", body
     )
-    if emails_in_body or " SEO " in body:
+    if emails_in_body or has_spam_words(body):
         # genuine human beings know that email has its own form field
         # assume only desperate spammers are going to include it twice
         fd, path = tempfile.mkstemp(dir=app.config["SPAM_DIR"], text=True)
